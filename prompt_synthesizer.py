@@ -7,7 +7,7 @@ import random
 import time
 import json
 from dotenv import load_dotenv
-from streamlit_lottie import st_lottie  # For Lottie animations
+from streamlit_lottie import st_lottie
 
 # --- Load environment variables ---
 load_dotenv()
@@ -43,7 +43,7 @@ tips = [
 ]
 random_tip = random.choice(tips)
 
-# --- Load Prompt History (dev only) ---
+# --- Load Prompt History (only in dev mode) ---
 history_path = "prompt_history.csv"
 if IS_DEV and os.path.exists(history_path):
     past_prompts = pd.read_csv(history_path)
@@ -51,13 +51,114 @@ else:
     past_prompts = pd.DataFrame()
 
 # --- Valid tone options ---
-valid_tones = ["Clear and helpful", "Professional", "Casual", "Funny", "Creative", "Motivational", "Witty", "Analytical", "Cynical but comforting", "Roasty", "Passive aggressive", "Aggressively encouraging", "Satirical", "Irritated", "Snarky", "Reflective"]
+valid_tones = [
+    "Clear and helpful", "Professional", "Casual", "Funny", "Creative",
+    "Motivational", "Witty", "Analytical", "Cynical but comforting", "Roasty",
+    "Passive aggressive", "Aggressively encouraging", "Satirical", "Irritated",
+    "Snarky", "Reflective"
+]
 
 # --- Templates grouped by category ---
-# (Your template dictionary remains unchanged — skipped here for brevity)
-# Just paste your full templates_by_category dictionary back in
+templates_by_category = {
+    "🏢 Real Estate": {
+        "Cold Outreach Message": {
+            "goal": "Craft a short, attention-grabbing message to reach out to a new commercial real estate prospect in Tucson, AZ.",
+            "tone": "Professional",
+            "output_type": "Text",
+            "audience": "Commercial property owners"
+        },
+        "Market Summary Generator": {
+            "goal": "Summarize the current real estate market trends for investors in a specific submarket.",
+            "tone": "Clear and helpful",
+            "output_type": "Markdown",
+            "audience": "CRE investors"
+        },
+        "Deal Analysis Helper": {
+            "goal": "Help analyze the pros and cons of an industrial property investment opportunity in Tucson, AZ.",
+            "tone": "Analytical",
+            "output_type": "Bullet List",
+            "audience": "CRE analysts and brokers"
+        }
+    },
+    "📈 Productivity & Learning": {
+        "Productivity Prompt Planner": {
+            "goal": "Generate a set of focused prompts to help me plan and prioritize my day effectively.",
+            "tone": "Motivational",
+            "output_type": "Bullet List",
+            "audience": "Busy professionals and productivity nerds"
+        },
+        "Prompt Engineering Optimizer": {
+            "goal": "Take a rough prompt I've written and improve it so it's more structured, clear, and effective.",
+            "tone": "Clear and helpful",
+            "output_type": "Markdown",
+            "audience": "Anyone learning how to prompt better"
+        },
+        "Weekly Review Wizard": {
+            "goal": "Guide me through a weekly review of what I accomplished, learned, and what I want to focus on next.",
+            "tone": "Reflective",
+            "output_type": "Conversation",
+            "audience": "Personal growth and productivity focused users"
+        }
+    },
+    "🎉 Creative & Fun": {
+        "Vibecode Brainstorm Buddy": {
+            "goal": "Come up with fresh, creative app or automation ideas that I could build with my current skills.",
+            "tone": "Creative",
+            "output_type": "Bullet List",
+            "audience": "A vibecoder looking for weekend build ideas"
+        },
+        "Mindset Reframe": {
+            "goal": "Help me reframe a negative thought or frustration into something more constructive and empowering.",
+            "tone": "Witty",
+            "output_type": "Text",
+            "audience": "Someone in a funk who needs a boost"
+        },
+        "Existential Crisis Coach": {
+            "goal": "Help me cope with the crushing weight of late capitalism using sarcasm and dark humor.",
+            "tone": "Cynical but comforting",
+            "output_type": "Text",
+            "audience": "Millennials spiraling at 2AM"
+        },
+        "Roast My Life Decisions": {
+            "goal": "Make fun of me for buying a $7 latte instead of saving for retirement, but make it clever and a little too real.",
+            "tone": "Roasty",
+            "output_type": "Bullet List",
+            "audience": "People who enjoy pain as comedy"
+        },
+        "Email Response Rage Filter": {
+            "goal": "Help me respond to a deeply annoying email in a professional tone while screaming internally.",
+            "tone": "Passive aggressive",
+            "output_type": "Text",
+            "audience": "Anyone who's ever replied all by accident"
+        },
+        "Clean Your Damn Room Bot": {
+            "goal": "Write a motivational pep talk that uses tough love and light profanity to convince me to clean my disgusting room.",
+            "tone": "Aggressively encouraging",
+            "output_type": "Text",
+            "audience": "Procrastinators and goblins"
+        },
+        "Startup Idea Generator (That Probably Sucks)": {
+            "goal": "Give me absurd startup ideas that sound real until you think about them for more than 10 seconds.",
+            "tone": "Satirical",
+            "output_type": "Bullet List",
+            "audience": "Tech bros with too much VC money"
+        },
+        "Rage Journal Prompt": {
+            "goal": "Give me a writing prompt to vent all my rage about people who don’t use their turn signals.",
+            "tone": "Irritated",
+            "output_type": "Markdown",
+            "audience": "Drivers barely holding on"
+        },
+        "Corporate Bullshit Translator": {
+            "goal": "Take a vague corporate memo and rewrite it with brutal honesty, swearing allowed.",
+            "tone": "Snarky",
+            "output_type": "Text",
+            "audience": "Employees who know the game"
+        }
+    }
+}
 
-# --- Flatten and tag templates ---
+# --- Flatten templates ---
 templates = {}
 template_categories = {}
 for category, entries in templates_by_category.items():
@@ -65,7 +166,7 @@ for category, entries in templates_by_category.items():
         templates[name] = data
         template_categories[name] = category
 
-# --- Hero Banner ---
+# --- UI Layout ---
 st.markdown("""
     <div style="background: linear-gradient(135deg, #6e8efb, #a777e3); padding: 2rem 1rem; border-radius: 1.5rem; text-align: center; color: white; margin-bottom: 2rem;">
         <h1 style="font-size: 2.5rem;">💡 Prompt Synthesizer</h1>
@@ -73,7 +174,7 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
-# --- Sidebar UI ---
+# --- Sidebar ---
 with st.sidebar:
     lottie_json = load_lottiefile("idea.json")
     st_lottie(lottie_json, width=200, height=200, key="idea")
@@ -90,6 +191,7 @@ for category, entries in templates_by_category.items():
         if st.sidebar.button(name):
             st.session_state.selected_template = name
 
+# --- Form ---
 selected_template = st.session_state.get("selected_template", "")
 template_data = templates.get(selected_template, {})
 prefill = template_data if template_data else {}
@@ -107,6 +209,7 @@ with st.form("prompt_form"):
     save_txt = st.checkbox("💾 Save this to a .txt file?")
     submitted = st.form_submit_button("✨ Generate Prompt")
 
+# --- Prompt Generation ---
 if submitted:
     with st.spinner("🪄 Synthesizing your prompt..."):
         prompt_template = f"""
@@ -165,7 +268,7 @@ Respond only with the generated prompt and tip.
         except Exception as e:
             st.error(f"⚠️ Something went wrong:\n\n{e}")
 
-# --- Prompt History (only in dev mode) ---
+# --- History Section ---
 if IS_DEV and os.path.exists(history_path):
     st.markdown("## 🕰️ Prompt History")
     with st.expander("Click to view your saved prompts"):
