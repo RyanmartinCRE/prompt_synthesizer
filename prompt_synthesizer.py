@@ -6,7 +6,12 @@ import os
 import random
 import time
 import json
+from dotenv import load_dotenv
 from streamlit_lottie import st_lottie  # For Lottie animations
+
+# --- Load environment variables ---
+load_dotenv()
+IS_DEV = os.getenv("APP_MODE") == "dev"
 
 # --- Load Lottie JSON from local file ---
 def load_lottiefile(filepath: str):
@@ -38,9 +43,12 @@ tips = [
 ]
 random_tip = random.choice(tips)
 
-# --- Load Prompt History ---
+# --- Load Prompt History (dev only) ---
 history_path = "prompt_history.csv"
-past_prompts = pd.read_csv(history_path) if os.path.exists(history_path) else pd.DataFrame()
+if IS_DEV and os.path.exists(history_path):
+    past_prompts = pd.read_csv(history_path)
+else:
+    past_prompts = pd.DataFrame()
 
 # --- Valid tone options ---
 valid_tones = ["Clear and helpful", "Professional", "Casual", "Funny", "Creative", "Motivational", "Witty", "Analytical", "Cynical but comforting", "Roasty", "Passive aggressive", "Aggressively encouraging", "Satirical", "Irritated", "Snarky", "Reflective"]
@@ -178,7 +186,6 @@ with st.sidebar:
     if st.button("🎲 Surprise Me!"):
         st.session_state.selected_template = random.choice(list(templates.keys()))
 
-# --- Template Category Buttons ---
 st.sidebar.markdown("<h3>📁 Templates</h3>", unsafe_allow_html=True)
 for category, entries in templates_by_category.items():
     st.sidebar.markdown(f"<h5>{category}</h5>", unsafe_allow_html=True)
@@ -186,17 +193,12 @@ for category, entries in templates_by_category.items():
         if st.sidebar.button(name):
             st.session_state.selected_template = name
 
-# --- Load selected template ---
 selected_template = st.session_state.get("selected_template", "")
 template_data = templates.get(selected_template, {})
-
-# --- Prefill Logic ---
 prefill = template_data if template_data else {}
 
-# --- Prompt Input Form ---
 with st.form("prompt_form"):
     st.markdown("### ✍️ Your Prompt Details")
-
     goal = st.text_area("💡 What do you want the AI to do?", value=prefill.get("goal", ""))
 
     col1, col2 = st.columns(2)
@@ -210,7 +212,6 @@ with st.form("prompt_form"):
     save_txt = st.checkbox("💾 Save this to a .txt file?")
     submitted = st.form_submit_button("✨ Generate Prompt")
 
-# --- Prompt Engine ---
 if submitted:
     with st.spinner("🪄 Synthesizing your prompt..."):
         prompt_template = f"""
@@ -236,22 +237,12 @@ Respond only with the generated prompt and tip.
             response = model.generate_content(prompt_template)
             result = response.text
 
-            st.markdown("## 🎯 Your Generated Prompt")
+            st.markdown("## 🌟 Your Generated Prompt")
             st.markdown(f"""
-                <div style='
-                    background-color: #fdfdfd;
-                    border-left: 5px solid #a777e3;
-                    border-radius: 0.5rem;
-                    padding: 1rem;
-                    font-family: monospace;
-                    font-size: 0.9rem;
-                    line-height: 1.6;
-                    white-space: pre-wrap;
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-                '>{result}</div>
+                <div style='background-color: #fdfdfd; border-left: 5px solid #a777e3; border-radius: 0.5rem; padding: 1rem; font-family: monospace; font-size: 0.9rem; line-height: 1.6; white-space: pre-wrap; box-shadow: 0 4px 12px rgba(0,0,0,0.05);'>{result}</div>
             """, unsafe_allow_html=True)
 
-            st.download_button("📥 Download Prompt", result, file_name="prompt.txt", mime="text/plain")
+            st.download_button("📅 Download Prompt", result, file_name="prompt.txt", mime="text/plain")
 
             if save_txt:
                 filename = f"prompt_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.txt"
@@ -268,18 +259,18 @@ Respond only with the generated prompt and tip.
                 "prompt": result
             }
 
-            if os.path.exists(history_path):
-                df = pd.read_csv(history_path)
-                df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
-            else:
-                df = pd.DataFrame([new_row])
-            df.to_csv(history_path, index=False)
+            if IS_DEV:
+                if os.path.exists(history_path):
+                    df = pd.read_csv(history_path)
+                    df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
+                else:
+                    df = pd.DataFrame([new_row])
+                df.to_csv(history_path, index=False)
 
         except Exception as e:
             st.error(f"⚠️ Something went wrong:\n\n{e}")
 
-# --- Prompt History Viewer ---
-if os.path.exists(history_path):
+if IS_DEV and os.path.exists(history_path):
     st.markdown("## 🕰️ Prompt History")
     with st.expander("Click to view your saved prompts"):
         history_df = pd.read_csv(history_path)
@@ -290,8 +281,6 @@ if os.path.exists(history_path):
 else:
     st.info("No prompt history found yet. Generate a prompt to get started.")
 
-import random
-
 sign_offs = [
     "Built by Ryan Martin. If it breaks, it's your fault.",
     "Another lovingly overengineered tool by Ryan Martin.",
@@ -299,7 +288,6 @@ sign_offs = [
     "Ryan Martin made this. Don't encourage him."
 ]
 
-# Hide from print/download (using a CSS class)
 st.markdown("""
     <style>
     .footer-note { text-align: center; font-size: 0.9rem; color: gray; }
@@ -309,10 +297,10 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Collapsible footer with random message
 with st.expander("👋 About this app"):
     st.markdown(f"""
     <div class="footer-note">
         {random.choice(sign_offs)}
     </div>
     """, unsafe_allow_html=True)
+
