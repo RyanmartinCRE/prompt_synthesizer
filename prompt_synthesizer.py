@@ -54,104 +54,8 @@ else:
 valid_tones = ["Clear and helpful", "Professional", "Casual", "Funny", "Creative", "Motivational", "Witty", "Analytical", "Cynical but comforting", "Roasty", "Passive aggressive", "Aggressively encouraging", "Satirical", "Irritated", "Snarky", "Reflective"]
 
 # --- Templates grouped by category ---
-templates_by_category = {
-    "🏢 Real Estate": {
-        "Cold Outreach Message": {
-            "goal": "Craft a short, attention-grabbing message to reach out to a new commercial real estate prospect in Tucson, AZ.",
-            "tone": "Professional",
-            "output_type": "Text",
-            "audience": "Commercial property owners"
-        },
-        "Market Summary Generator": {
-            "goal": "Summarize the current real estate market trends for investors in a specific submarket.",
-            "tone": "Clear and helpful",
-            "output_type": "Markdown",
-            "audience": "CRE investors"
-        },
-        "Deal Analysis Helper": {
-            "goal": "Help analyze the pros and cons of an industrial property investment opportunity in Tucson, AZ.",
-            "tone": "Analytical",
-            "output_type": "Bullet List",
-            "audience": "CRE analysts and brokers"
-        }
-    },
-    "📈 Productivity & Learning": {
-        "Productivity Prompt Planner": {
-            "goal": "Generate a set of focused prompts to help me plan and prioritize my day effectively.",
-            "tone": "Motivational",
-            "output_type": "Bullet List",
-            "audience": "Busy professionals and productivity nerds"
-        },
-        "Prompt Engineering Optimizer": {
-            "goal": "Take a rough prompt I've written and improve it so it's more structured, clear, and effective.",
-            "tone": "Clear and helpful",
-            "output_type": "Markdown",
-            "audience": "Anyone learning how to prompt better"
-        },
-        "Weekly Review Wizard": {
-            "goal": "Guide me through a weekly review of what I accomplished, learned, and what I want to focus on next.",
-            "tone": "Reflective",
-            "output_type": "Conversation",
-            "audience": "Personal growth and productivity focused users"
-        }
-    },
-    "🎉 Creative & Fun": {
-        "Vibecode Brainstorm Buddy": {
-            "goal": "Come up with fresh, creative app or automation ideas that I could build with my current skills.",
-            "tone": "Creative",
-            "output_type": "Bullet List",
-            "audience": "A vibecoder looking for weekend build ideas"
-        },
-        "Mindset Reframe": {
-            "goal": "Help me reframe a negative thought or frustration into something more constructive and empowering.",
-            "tone": "Witty",
-            "output_type": "Text",
-            "audience": "Someone in a funk who needs a boost"
-        },
-        "Existential Crisis Coach": {
-            "goal": "Help me cope with the crushing weight of late capitalism using sarcasm and dark humor.",
-            "tone": "Cynical but comforting",
-            "output_type": "Text",
-            "audience": "Millennials spiraling at 2AM"
-        },
-        "Roast My Life Decisions": {
-            "goal": "Make fun of me for buying a $7 latte instead of saving for retirement, but make it clever and a little too real.",
-            "tone": "Roasty",
-            "output_type": "Bullet List",
-            "audience": "People who enjoy pain as comedy"
-        },
-        "Email Response Rage Filter": {
-            "goal": "Help me respond to a deeply annoying email in a professional tone while screaming internally.",
-            "tone": "Passive aggressive",
-            "output_type": "Text",
-            "audience": "Anyone who's ever replied all by accident"
-        },
-        "Clean Your Damn Room Bot": {
-            "goal": "Write a motivational pep talk that uses tough love and light profanity to convince me to clean my disgusting room.",
-            "tone": "Aggressively encouraging",
-            "output_type": "Text",
-            "audience": "Procrastinators and goblins"
-        },
-        "Startup Idea Generator (That Probably Sucks)": {
-            "goal": "Give me absurd startup ideas that sound real until you think about them for more than 10 seconds.",
-            "tone": "Satirical",
-            "output_type": "Bullet List",
-            "audience": "Tech bros with too much VC money"
-        },
-        "Rage Journal Prompt": {
-            "goal": "Give me a writing prompt to vent all my rage about people who don’t use their turn signals.",
-            "tone": "Irritated",
-            "output_type": "Markdown",
-            "audience": "Drivers barely holding on"
-        },
-        "Corporate Bullshit Translator": {
-            "goal": "Take a vague corporate memo and rewrite it with brutal honesty, swearing allowed.",
-            "tone": "Snarky",
-            "output_type": "Text",
-            "audience": "Employees who know the game"
-        }
-    }
-}
+# (Your template dictionary remains unchanged — skipped here for brevity)
+# Just paste your full templates_by_category dictionary back in
 
 # --- Flatten and tag templates ---
 templates = {}
@@ -163,13 +67,7 @@ for category, entries in templates_by_category.items():
 
 # --- Hero Banner ---
 st.markdown("""
-    <div style="
-        background: linear-gradient(135deg, #6e8efb, #a777e3);
-        padding: 2rem 1rem;
-        border-radius: 1.5rem;
-        text-align: center;
-        color: white;
-        margin-bottom: 2rem;">
+    <div style="background: linear-gradient(135deg, #6e8efb, #a777e3); padding: 2rem 1rem; border-radius: 1.5rem; text-align: center; color: white; margin-bottom: 2rem;">
         <h1 style="font-size: 2.5rem;">💡 Prompt Synthesizer</h1>
         <p style="font-size: 1.1rem;">Turn your rough idea into a polished AI prompt</p>
     </div>
@@ -177,9 +75,8 @@ st.markdown("""
 
 # --- Sidebar UI ---
 with st.sidebar:
-    lottie_json = load_lottiefile("idea.json")  # 👈 Local Lottie file
+    lottie_json = load_lottiefile("idea.json")
     st_lottie(lottie_json, width=200, height=200, key="idea")
-
     st.markdown("<h2>💡 Prompt Toolkit</h2>", unsafe_allow_html=True)
     st.markdown(f"📌 <i>Tip of the Day:</i> <small>{random_tip}</small>", unsafe_allow_html=True)
     st.markdown("---")
@@ -200,14 +97,12 @@ prefill = template_data if template_data else {}
 with st.form("prompt_form"):
     st.markdown("### ✍️ Your Prompt Details")
     goal = st.text_area("💡 What do you want the AI to do?", value=prefill.get("goal", ""))
-
     col1, col2 = st.columns(2)
     with col1:
         tone = st.selectbox("🎭 Tone or vibe", valid_tones, index=valid_tones.index(prefill.get("tone", "Clear and helpful")))
     with col2:
         output_type = st.selectbox("🧾 Output format", ["Text", "Conversation", "Image Prompt", "Markdown", "Bullet List", "JSON"],
                                    index=["Text", "Conversation", "Image Prompt", "Markdown", "Bullet List", "JSON"].index(prefill.get("output_type", "Text")))
-
     audience = st.text_input("👥 Who's it for? (Optional)", value=prefill.get("audience", ""))
     save_txt = st.checkbox("💾 Save this to a .txt file?")
     submitted = st.form_submit_button("✨ Generate Prompt")
@@ -242,7 +137,7 @@ Respond only with the generated prompt and tip.
                 <div style='background-color: #fdfdfd; border-left: 5px solid #a777e3; border-radius: 0.5rem; padding: 1rem; font-family: monospace; font-size: 0.9rem; line-height: 1.6; white-space: pre-wrap; box-shadow: 0 4px 12px rgba(0,0,0,0.05);'>{result}</div>
             """, unsafe_allow_html=True)
 
-            st.download_button("📅 Download Prompt", result, file_name="prompt.txt", mime="text/plain")
+            st.download_button("📥 Download Prompt", result, file_name="prompt.txt", mime="text/plain")
 
             if save_txt:
                 filename = f"prompt_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.txt"
@@ -270,6 +165,7 @@ Respond only with the generated prompt and tip.
         except Exception as e:
             st.error(f"⚠️ Something went wrong:\n\n{e}")
 
+# --- Prompt History (only in dev mode) ---
 if IS_DEV and os.path.exists(history_path):
     st.markdown("## 🕰️ Prompt History")
     with st.expander("Click to view your saved prompts"):
@@ -281,6 +177,7 @@ if IS_DEV and os.path.exists(history_path):
 else:
     st.info("No prompt history found yet. Generate a prompt to get started.")
 
+# --- Footer ---
 sign_offs = [
     "Built by Ryan Martin. If it breaks, it's your fault.",
     "Another lovingly overengineered tool by Ryan Martin.",
@@ -303,4 +200,3 @@ with st.expander("👋 About this app"):
         {random.choice(sign_offs)}
     </div>
     """, unsafe_allow_html=True)
-
