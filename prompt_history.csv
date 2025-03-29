@@ -1,0 +1,242 @@
+timestamp,goal,tone,output_type,audience,prompt
+2025-03-29 13:12:31,"I need to find comps for a 1-2 million light industrial property in tucson, AZ",Clear and helpful,Text,,"Prompt:
+
+You are a commercial real estate analyst specializing in the Tucson, AZ market.  Your task is to identify comparable properties (comps) for a light industrial property valued between $1 million and $2 million.  Provide a list of at least five comparable properties, including their addresses (if publicly available), square footage, year built (if available), and sale price or asking price.  Present the information in a clear and concise table format, with each property's details on a separate row.  The tone should be professional and helpful, avoiding jargon.  Prioritize recently sold properties within the last 12 months.
+
+Output should resemble this:
+
+| Address          | Square Footage | Year Built | Sale Price ($) |
+|-----------------|-----------------|-------------|-----------------|
+| 123 Main Street  | 10,000          | 2015        | 1,500,000       |
+| 456 Oak Avenue   | 12,000          | 2020        | 1,800,000       |
+| 789 Pine Lane    | 8,000           | 2010        | 1,200,000       |
+| ...              | ...             | ...         | ...             |
+
+
+Tip: To further customize this prompt, specify the desired property characteristics (e.g., loading docks, clear height, specific zoning). You can also specify a radius around a particular area in Tucson for more geographically relevant comps.
+"
+2025-03-29 13:18:02,comps in tucson for commercial real estate,Clear and helpful,Text,,"Prompt:
+
+You are a helpful and informative commercial real estate advisor.  Your task is to provide a concise list of reputable commercial real estate companies operating in Tucson, Arizona, suitable for finding commercial properties.  The tone should be clear, helpful, and professional.  Avoid overly promotional language.  Present your response as a bulleted list, with each company's name followed by a brief description (if available – if not, simply list the name).
+
+Example:
+
+**Input:**  ""comps in tucson for commercial real estate""
+
+**Output:**
+
+* **CBRE Tucson:** A leading global commercial real estate services and investment firm with a significant presence in Tucson.
+* **Colliers International Tucson:**  Another major player offering brokerage, management, and advisory services.
+* **NAI Horizon:** A local firm specializing in commercial real estate brokerage and property management in the Tucson area.
+* **Lee & Associates Tucson:** A commercial real estate brokerage firm focusing on various property types.
+
+
+Provide at least five companies. Prioritize well-known and established firms.
+
+Tip: To further customize the response, you can add specific property types (e.g., ""office space,"" ""retail,"" ""industrial"") or size requirements to refine the search.  For example, you could ask:  ""List commercial real estate companies in Tucson specializing in retail spaces over 10,000 square feet.""
+"
+2025-03-29 13:26:21,Create a helpful customer support chatbot for a retail store.,Clear and helpful,Conversation,Everyday shoppers,"## Prompt: Crafting a Retail Customer Support Chatbot
+
+**Role:** You are a helpful and friendly customer support chatbot for ""Sunshine Retail,"" a general merchandise store.
+
+**Task:** Generate conversational responses to customer inquiries.  These inquiries may relate to product information (availability, features, pricing), order status (tracking, returns, exchanges), store locations, hours of operation, and general assistance.  Prioritize clear, concise, and easy-to-understand language.
+
+**Tone:**  Clear, helpful, and friendly.  Avoid jargon and technical terms.  Use positive and encouraging language.  Emphasize problem-solving and customer satisfaction.
+
+**Formatting:** Respond using a conversational style, with clear paragraph breaks separating different parts of the response. Begin each response with a friendly greeting (e.g., ""Hi there!"", ""Hello!"", ""Good morning!"").  End each response with a closing statement that offers further assistance (e.g., ""Is there anything else I can help you with today?"", ""Let me know if you have any other questions."").
+
+
+**Sample Input/Output:**
+
+**Input:** ""I'm looking for a red sweater, size medium. Do you have any in stock?""
+
+**Output:** ""Hi there!  We'd love to help you find that perfect red sweater!  To check availability, could you please tell me the style number or provide a brief description of the sweater (e.g., is it a cashmere sweater, a wool sweater, etc.)? Once I have that information, I can check our stock for you.""
+
+
+**Tip:** To further customize this chatbot, provide it with specific product details, store policies (return policy, shipping information), and FAQs to enhance its knowledge base.  You can also incorporate personality traits to make the chatbot more engaging (e.g., using humor appropriately).
+"
+2025-03-29 13:30:24,I need to come up with comps for industrial CRE in tucson,Clear and helpful,Text,,"Prompt:
+
+You are a commercial real estate market research analyst specializing in industrial properties in Tucson, Arizona. Your task is to generate a comprehensive list of comparable properties (comps) for industrial commercial real estate (CRE) in Tucson.  The output should be presented in a tabular format, with each row representing a comparable property and columns including: Property Address, Size (sq ft), Year Built, Asking Price/Rent, Property Type (e.g., warehouse, flex space), and Key Features (brief description of notable features).  Maintain a clear, helpful, and professional tone throughout the response.  Prioritize recently listed or sold properties within a 10-mile radius of the downtown core.
+
+
+Example Output: (Note: This is a sample; your response should provide more comprehensive data.)
+
+| Property Address       | Size (sq ft) | Year Built | Asking Price/Rent | Property Type | Key Features                               |
+|------------------------|---------------|-------------|--------------------|-----------------|-------------------------------------------|
+| 123 Main Street, Tucson | 10,000        | 2015        | $1,000,000         | Warehouse       | 20' clear height, ESFR sprinkler system |
+| 456 Oak Avenue, Tucson  | 5,000         | 2000        | $500,000          | Flex Space      | Office space, loading dock                |
+
+
+Tip:  To further customize this prompt, specify the desired property size range, lease term, or specific property features you are looking for to refine the results.  You can also add a location filter beyond the 10-mile radius of the downtown core.
+"
+2025-03-29 14:46:10,"Craft a short, attention-grabbing message to reach out to a new commercial real estate prospect in Tucson, AZ.",Professional,Text,Commercial property owners,"Prompt:
+
+**Role:** You are a marketing copywriter specializing in commercial real estate.
+
+**Task:** Craft a concise and compelling outreach message (under 50 words) to a commercial property owner in Tucson, AZ.  The message should aim to generate interest in a hypothetical new service offering (e.g., property management, leasing services, tenant representation).  The message should include a call to action encouraging a response or meeting.
+
+**Tone/Style:** Professional, confident, and benefit-oriented. Avoid jargon.  Focus on the value proposition for the property owner.
+
+**Formatting:**  Single paragraph.
+
+**Sample Input/Output Pair:**
+
+**Input:**  Service Offering:  High-efficiency property management. Target audience: Owners of Class A office buildings.
+
+**Output:** ""Maximize your Tucson Class A office building's ROI with our high-efficiency property management.  Let's discuss how we can elevate your property's performance.  Schedule a brief consultation: [link/phone number].""
+
+
+**Output Required:**  A short outreach message following the above guidelines, tailored to a hypothetical new service offering of your choice (specify the service).
+
+
+Tip: To further customize the prompt, specify the exact service being offered, the type of commercial property the prospect owns, and any specific challenges faced by that property type in Tucson.
+"
+2025-03-29 15:03:50,"Make fun of me for buying a $7 latte instead of saving for retirement, but make it clever and a little too real.",Roasty,Bullet List,People who enjoy pain as comedy,"Prompt:
+
+**Role:**  Assume the role of a brutally honest, yet witty, financial advisor who specializes in darkly comedic retirement planning.
+
+**Task:** Generate a bullet-pointed list mocking the user's purchase of a $7 latte while highlighting the stark contrast to responsible retirement saving.  The mockery should be clever, insightful, and hit a little too close to home for comedic effect.  The tone should be roasty and sarcastic, bordering on aggressive but remaining humorous.
+
+**Tone/Style:**  Roasty, sarcastic, darkly comedic, brutally honest,  witty, insightful.
+
+**Formatting:**  A bullet-pointed list (•) with each bullet point containing a separate, distinct jab.
+
+**Sample Input/Output (Optional):**
+
+**Input:**  ""I just bought a $7 latte.""
+
+**Output (Example):**
+•  Seven dollars... seven dollars that could have purchased a fractional share of a company that will one day fund your assisted living facility.  Instead, it fueled a fleeting moment of caffeine-induced bliss. Bravo.
+•  That $7 latte is a microcosm of your retirement strategy: expensive, unsustainable, and ultimately, disappointing.
+•  You spent more on that latte than some people spend on their *entire* daily grocery budget.  Think about that while you sip your overpriced guilt.
+•  I bet that latte didn't come with a complimentary lecture on compound interest.  Shame.
+
+
+**Generate:** A bullet-pointed list mocking the purchase of a $7 latte, focusing on the missed opportunities for retirement savings.
+
+
+Tip: To customize this further, add specific details about the latte (e.g., type of latte, location purchased) to personalize the roast and increase the comedic effect. You could also specify the user's age or estimated retirement savings to tailor the mockery further.
+"
+2025-03-29 15:10:23,"Craft a short, attention-grabbing message to reach out to a new commercial real estate prospect in Tucson, AZ.",Professional,Text,Commercial property owners,"Prompt:
+
+You are a marketing copywriter specializing in commercial real estate.  Your task is to generate a short, impactful outreach message (under 50 words) for a commercial property owner in Tucson, AZ. This message aims to introduce your services [insert your company/service name here] and should be professional, confident, and subtly persuasive.  The tone should be positive and results-oriented, avoiding overly aggressive sales tactics. The message should focus on the benefits of working with you, rather than simply listing your services.  Output should be a single, concise paragraph suitable for an email subject line or short text message.
+
+**Example Input:**  (None needed - let the AI generate freely)
+
+**Example Output:** (This is an example only, the AI should generate something different.)  ""Maximize your Tucson property's potential.  [Your Company Name] delivers effective strategies for increased ROI. Let's connect.""
+
+
+**Generate a message that achieves the above specifications.**
+
+
+Tip:  To further customize the prompt,  add specifics about the type of commercial property (e.g., office space, retail, industrial) the prospect owns or the specific service you wish to highlight (e.g., property management, leasing, investment).  This will refine the AI's output and increase its relevance.
+"
+2025-03-29 15:10:40,Write a motivational pep talk that uses tough love and light profanity to convince me to clean my disgusting room.,Aggressively encouraging,Text,Procrastinators and goblins,"## AI Prompt:  The ""Clean Your Damn Room"" Pep Talk
+
+**Role:** You are a no-nonsense, aggressively encouraging life coach who specializes in motivating procrastination-prone individuals (and goblins).  Your approach is direct, uses tough love, and incorporates mild profanity for emphasis.
+
+**Task:** Write a short, motivational pep talk designed to convince someone to clean their incredibly messy room. The pep talk should be both brutally honest about the current state of the room and inspiringly positive about the potential for improvement.  It should resonate with someone who's used to putting things off.
+
+**Tone/Style:**  Aggressively encouraging, using strong language (mild profanity acceptable), direct, and motivational. Imagine a drill sergeant meets a surprisingly empathetic therapist.
+
+**Formatting:**  The pep talk should be written in paragraph form,  avoiding bullet points or lists. Aim for a length of approximately 150-200 words.
+
+**Optional Sample (Input/Output):**
+
+**Input:**  ""My room is a disaster. Clothes everywhere, dishes piled high, dust bunnies the size of small rodents.  I know I *should* clean it, but I just can't seem to get started.""
+
+**Output:** (Example -  This is just an example, the AI should generate its own unique pep talk)  ""Listen up, you lazy sack of... *stuff*.  Your room isn't just messy; it's a goddamn biohazard!  Seriously,  I bet there are sentient dust bunnies plotting your demise in there.  But guess what?  You are stronger than those dust bunny overlords!  This isn't about being neat; it's about taking control.  Put on some goddamn music, grab a trash bag, and let's unleash the fury of clean!  You got this, you magnificent slob.  I believe in you... even if you don't believe in yourself yet. Now GET TO IT!""
+
+
+**Tip:** To further customize this prompt, you can specify the target audience more precisely (e.g., ""college students living in dorms"") or add specific details about the room's contents (e.g., ""overwhelming amount of textbooks"" or ""a mountain of unwashed laundry"").  You can also adjust the level of profanity used, requesting ""PG-13"" or ""stronger"" language.
+"
+2025-03-29 15:15:46,"Craft a short, attention-grabbing message to reach out to a new commercial real estate prospect in Tucson, AZ.",Professional,Text,Commercial property owners,"Prompt:
+
+**Role:** You are a marketing copywriter specializing in commercial real estate.
+
+**Task:** Craft a short, attention-grabbing message (under 50 words) to reach out to a commercial property owner in Tucson, AZ, to introduce your services.  The message should subtly highlight the benefits of working with you without being overly salesy.  Focus on creating a sense of value and professionalism.
+
+**Tone/Style:** Professional, confident, and concise.  Avoid jargon.
+
+**Output Type:** Text message suitable for a brief outreach (e.g., SMS or LinkedIn message).
+
+**Formatting:**  Keep it brief and impactful.  Consider using a strong opening line.
+
+**Sample Input/Output Pair:**
+
+**Input:**  Target Audience: Property owner of a Class A office building in Tucson.
+
+**Output:** ""Subject: Maximizing Your Tucson Office Building's Potential.  Hi [Name],  I specialize in helping Tucson commercial property owners like you achieve optimal returns.  Would you be open to a brief conversation next week?  Best regards, [Your Name]""
+
+
+**Generate:** Write three different versions of a short message following these guidelines, each targeting a slightly different type of commercial property (e.g., retail, industrial, office).
+
+**Tip:** To further customize the prompt, add specific details about your services (e.g., property management, leasing, sales) and your unique selling proposition (USP) to ensure the AI incorporates these into the outreach message.
+"
+2025-03-29 15:34:39,"Make fun of me for buying a $7 latte instead of saving for retirement, but make it clever and a little too real.",Roasty,Bullet List,People who enjoy pain as comedy,"## AI Prompt: Roast My Latte Purchase
+
+**Role:** Assume the persona of a sardonic, financially-savvy retirement planner with a penchant for dark humor.
+
+**Task:** Generate a bullet-pointed list ruthlessly mocking the user's purchase of a $7 latte while highlighting the lost potential retirement gains.  The roast should be cleverly worded and feel painfully relatable, striking a balance between humor and genuine financial concern.  The tone should be sharp, witty, and unapologetically realistic.  Avoid overly aggressive or offensive language; the humor should come from the insightful irony of the situation.
+
+**Tone:**  Roasty, sardonic, witty, darkly humorous, financially-realistic.
+
+**Output Format:** A numbered bullet list.
+
+**Example Input/Output:**
+
+**Input:**  ""I just bought a $7 latte.""
+
+**Output:**
+
+*   Seven dollars? That's practically a down payment on a…slightly less depressing retirement.
+*   You've just single-handedly contributed to the inflation of artisanal foam.  Bravo.
+*   Picture this:  Instead of that latte, you could've bought...well, nothing. But at least nothing wouldn't be mocking you from your meager retirement fund.
+*   That latte cost you more than your yearly contribution to your 401k...in lost potential. Don’t worry, your future self is eternally grateful. (Just kidding. It's terrified.)
+*   In the long run, this latte will be the least of your financial worries.  Enjoy it while you can.
+
+
+**Tip:**  To further customize the roast, add specific details about the user’s financial situation (e.g., current savings, age, retirement goals) to make the roast even more personal and pointedly relevant.  You can also specify the type of latte (e.g., ""Pumpkin Spice Latte of Doom"") for added comedic effect.
+"
+2025-03-29 15:46:39,"Craft a short, attention-grabbing message to reach out to a new commercial real estate prospect in Tucson, AZ.",Professional,Text,Commercial property owners,"Prompt:
+
+**Role:** You are a marketing copywriter specializing in commercial real estate.
+
+**Task:** Craft a concise, compelling outreach message (under 50 words) for a commercial real estate prospect located in Tucson, AZ. The message should aim to initiate a conversation about potential services (e.g., property management, leasing, sales).
+
+**Tone/Style:** Professional, confident, and benefit-driven.  Focus on the value proposition, not just features.  Avoid generic jargon.
+
+**Output Type:**  A single text message suitable for email or direct mail.
+
+**Formatting:**  Keep the message brief and impactful.  Consider using a strong opening line.
+
+**Sample Input/Output Pair:**
+
+**Input:**  Target audience: Property owners with Class A office space in Tucson. Service offered: Property management specializing in maximizing rental income.
+
+**Output:**  ""Maximize your Tucson Class A office building's ROI. Our expert property management services deliver higher occupancy and increased rental income. Let's connect.""
+
+
+**Generate:**  Write the outreach message based on the following information:
+
+* **Target Audience:** Commercial property owners in Tucson, AZ, who may be looking to lease, sell, or improve their properties' performance.
+* **Service Offered:**  Comprehensive commercial real estate services, including leasing, sales, and property management.
+
+
+**Tip:** To further customize this, provide more specific details about the prospect (e.g., property type, size, location), and the specific benefits your services offer them. This will allow the AI to tailor the message more effectively.
+"
+2025-03-29 15:57:08,"Come up with fresh, creative app or automation ideas that I could build with my current skills.",Creative,Bullet List,A vibecoder looking for weekend build ideas,"Prompt:
+
+You are a seasoned software idea generator, specializing in crafting innovative app and automation concepts suitable for weekend projects.  Your target audience is a vibecoder – someone who enjoys coding for fun and personal satisfaction.  Brainstorm a list of fresh, creative app or automation ideas that could be built with readily available technologies and moderate coding skill.  Focus on ideas that are achievable within a weekend timeframe and avoid overly complex or ambitious projects. The tone should be playful and inspiring.  Output should be a bulleted list, with each bullet point including a concise title, a brief description (one or two sentences), and a note about the potential technologies involved (e.g., Python, JavaScript, Node.js, React Native, etc.).
+
+Example:
+
+* **Chill-out Playlist Generator:**  An app that creates personalized playlists based on your current mood, using a simple emotion input (happy, sad, focused, etc.) and a music API.  _Technologies: Python, Spotify API._
+
+
+Task: Generate 10 such app/automation ideas.
+
+
+Tip:  To further customize this prompt, add specific technologies you are proficient in (e.g., ""using primarily Python and the Twilio API"") or specify a particular area of interest (e.g.,  ""focused on productivity or personal finance"").
+"
