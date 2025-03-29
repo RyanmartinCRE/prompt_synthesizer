@@ -58,9 +58,9 @@ valid_tones = [
     "Snarky", "Reflective"
 ]
 
-# --- Templates grouped by category ---
+# --- Templates grouped by category (no emojis in keys!) ---
 templates_by_category = {
-    "🏢 Real Estate": {
+    "Real Estate": {
         "Cold Outreach Message": {
             "goal": "Craft a short, attention-grabbing message to reach out to a new commercial real estate prospect in Tucson, AZ.",
             "tone": "Professional",
@@ -80,7 +80,7 @@ templates_by_category = {
             "audience": "CRE analysts and brokers"
         }
     },
-    "📈 Productivity & Learning": {
+    "Productivity & Learning": {
         "Productivity Prompt Planner": {
             "goal": "Generate a set of focused prompts to help me plan and prioritize my day effectively.",
             "tone": "Motivational",
@@ -100,7 +100,7 @@ templates_by_category = {
             "audience": "Personal growth and productivity focused users"
         }
     },
-    "🎉 Creative & Fun": {
+    "Creative & Fun": {
         "Vibecode Brainstorm Buddy": {
             "goal": "Come up with fresh, creative app or automation ideas that I could build with my current skills.",
             "tone": "Creative",
@@ -158,6 +158,13 @@ templates_by_category = {
     }
 }
 
+# Emojis used only for sidebar display
+category_emojis = {
+    "Real Estate": "🏢",
+    "Productivity & Learning": "📈",
+    "Creative & Fun": "🎉"
+}
+
 # --- Flatten templates ---
 templates = {}
 template_categories = {}
@@ -166,7 +173,7 @@ for category, entries in templates_by_category.items():
         templates[name] = data
         template_categories[name] = category
 
-# --- UI Layout ---
+# --- UI ---
 st.markdown("""
     <div style="background: linear-gradient(135deg, #6e8efb, #a777e3); padding: 2rem 1rem; border-radius: 1.5rem; text-align: center; color: white; margin-bottom: 2rem;">
         <h1 style="font-size: 2.5rem;">💡 Prompt Synthesizer</h1>
@@ -174,7 +181,6 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
-# --- Sidebar ---
 with st.sidebar:
     lottie_json = load_lottiefile("idea.json")
     st_lottie(lottie_json, width=200, height=200, key="idea")
@@ -186,12 +192,12 @@ with st.sidebar:
 
 st.sidebar.markdown("<h3>📁 Templates</h3>", unsafe_allow_html=True)
 for category, entries in templates_by_category.items():
-    st.sidebar.markdown(f"<h5>{category}</h5>", unsafe_allow_html=True)
+    emoji = category_emojis.get(category, "")
+    st.sidebar.markdown(f"<h5>{emoji} {category}</h5>", unsafe_allow_html=True)
     for name in entries:
         if st.sidebar.button(name):
             st.session_state.selected_template = name
 
-# --- Form ---
 selected_template = st.session_state.get("selected_template", "")
 template_data = templates.get(selected_template, {})
 prefill = template_data if template_data else {}
@@ -209,7 +215,6 @@ with st.form("prompt_form"):
     save_txt = st.checkbox("💾 Save this to a .txt file?")
     submitted = st.form_submit_button("✨ Generate Prompt")
 
-# --- Prompt Generation ---
 if submitted:
     with st.spinner("🪄 Synthesizing your prompt..."):
         prompt_template = f"""
@@ -268,7 +273,6 @@ Respond only with the generated prompt and tip.
         except Exception as e:
             st.error(f"⚠️ Something went wrong:\n\n{e}")
 
-# --- History Section ---
 if IS_DEV and os.path.exists(history_path):
     st.markdown("## 🕰️ Prompt History")
     with st.expander("Click to view your saved prompts"):
@@ -280,7 +284,6 @@ if IS_DEV and os.path.exists(history_path):
 else:
     st.info("No prompt history found yet. Generate a prompt to get started.")
 
-# --- Footer ---
 sign_offs = [
     "Built by Ryan Martin. If it breaks, it's your fault.",
     "Another lovingly overengineered tool by Ryan Martin.",
