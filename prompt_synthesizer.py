@@ -6,6 +6,7 @@ import os
 import random
 import time
 import json
+import html  # ✅ Added for escaping AI output
 from dotenv import load_dotenv
 from streamlit_lottie import st_lottie
 
@@ -58,7 +59,7 @@ valid_tones = [
     "Snarky", "Reflective"
 ]
 
-# --- Templates grouped by category (no emojis in keys!) ---
+# --- Template categories and emojis ---
 templates_by_category = {
     "Real Estate": {
         "Cold Outreach Message": {
@@ -158,7 +159,6 @@ templates_by_category = {
     }
 }
 
-# Emojis used only for sidebar display
 category_emojis = {
     "Real Estate": "🏢",
     "Productivity & Learning": "📈",
@@ -173,7 +173,7 @@ for category, entries in templates_by_category.items():
         templates[name] = data
         template_categories[name] = category
 
-# --- UI ---
+# --- Hero Banner ---
 st.markdown("""
     <div style="background: linear-gradient(135deg, #6e8efb, #a777e3); padding: 2rem 1rem; border-radius: 1.5rem; text-align: center; color: white; margin-bottom: 2rem;">
         <h1 style="font-size: 2.5rem;">💡 Prompt Synthesizer</h1>
@@ -181,6 +181,7 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
+# --- Sidebar ---
 with st.sidebar:
     lottie_json = load_lottiefile("idea.json")
     st_lottie(lottie_json, width=200, height=200, key="idea")
@@ -198,6 +199,7 @@ for category, entries in templates_by_category.items():
         if st.sidebar.button(name):
             st.session_state.selected_template = name
 
+# --- Prompt Input Form ---
 selected_template = st.session_state.get("selected_template", "")
 template_data = templates.get(selected_template, {})
 prefill = template_data if template_data else {}
@@ -215,6 +217,7 @@ with st.form("prompt_form"):
     save_txt = st.checkbox("💾 Save this to a .txt file?")
     submitted = st.form_submit_button("✨ Generate Prompt")
 
+# --- Prompt Generation ---
 if submitted:
     with st.spinner("🪄 Synthesizing your prompt..."):
         prompt_template = f"""
@@ -239,10 +242,11 @@ Respond only with the generated prompt and tip.
         try:
             response = model.generate_content(prompt_template)
             result = response.text
+            escaped_result = html.escape(result)  # ✅ Prevent broken rendering
 
             st.markdown("## 🌟 Your Generated Prompt")
             st.markdown(f"""
-                <div style='background-color: #fdfdfd; border-left: 5px solid #a777e3; border-radius: 0.5rem; padding: 1rem; font-family: monospace; font-size: 0.9rem; line-height: 1.6; white-space: pre-wrap; box-shadow: 0 4px 12px rgba(0,0,0,0.05);'>{result}</div>
+                <div style='background-color: #fdfdfd; border-left: 5px solid #a777e3; border-radius: 0.5rem; padding: 1rem; font-family: monospace; font-size: 0.9rem; line-height: 1.6; white-space: pre-wrap; box-shadow: 0 4px 12px rgba(0,0,0,0.05);'>{escaped_result}</div>
             """, unsafe_allow_html=True)
 
             st.download_button("📥 Download Prompt", result, file_name="prompt.txt", mime="text/plain")
@@ -273,6 +277,7 @@ Respond only with the generated prompt and tip.
         except Exception as e:
             st.error(f"⚠️ Something went wrong:\n\n{e}")
 
+# --- Dev-only Prompt History ---
 if IS_DEV and os.path.exists(history_path):
     st.markdown("## 🕰️ Prompt History")
     with st.expander("Click to view your saved prompts"):
@@ -282,6 +287,7 @@ if IS_DEV and os.path.exists(history_path):
             'white-space': 'pre-wrap'
         }), use_container_width=True)
 
+# --- Footer ---
 sign_offs = [
     "Built by Ryan Martin. If it breaks, it's your fault.",
     "Another lovingly overengineered tool by Ryan Martin.",
