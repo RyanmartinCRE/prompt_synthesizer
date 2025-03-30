@@ -6,13 +6,7 @@ import os
 import random
 import time
 import json
-import html  # ✅ Added for escaping AI output
-from dotenv import load_dotenv
-from streamlit_lottie import st_lottie
-
-# --- Load environment variables ---
-load_dotenv()
-IS_DEV = os.getenv("APP_MODE") == "dev"
+from streamlit_lottie import st_lottie  # For Lottie animations
 
 # --- Load Lottie JSON from local file ---
 def load_lottiefile(filepath: str):
@@ -44,24 +38,16 @@ tips = [
 ]
 random_tip = random.choice(tips)
 
-# --- Load Prompt History (only in dev mode) ---
+# --- Load Prompt History ---
 history_path = "prompt_history.csv"
-if IS_DEV and os.path.exists(history_path):
-    past_prompts = pd.read_csv(history_path)
-else:
-    past_prompts = pd.DataFrame()
+past_prompts = pd.read_csv(history_path) if os.path.exists(history_path) else pd.DataFrame()
 
 # --- Valid tone options ---
-valid_tones = [
-    "Clear and helpful", "Professional", "Casual", "Funny", "Creative",
-    "Motivational", "Witty", "Analytical", "Cynical but comforting", "Roasty",
-    "Passive aggressive", "Aggressively encouraging", "Satirical", "Irritated",
-    "Snarky", "Reflective"
-]
+valid_tones = ["Clear and helpful", "Professional", "Casual", "Funny", "Creative", "Motivational", "Witty", "Analytical", "Cynical but comforting", "Roasty", "Passive aggressive", "Aggressively encouraging", "Satirical", "Irritated", "Snarky", "Reflective"]
 
-# --- Template categories and emojis ---
+# --- Templates grouped by category ---
 templates_by_category = {
-    "Real Estate": {
+    "🏢 Real Estate": {
         "Cold Outreach Message": {
             "goal": "Craft a short, attention-grabbing message to reach out to a new commercial real estate prospect in Tucson, AZ.",
             "tone": "Professional",
@@ -81,7 +67,7 @@ templates_by_category = {
             "audience": "CRE analysts and brokers"
         }
     },
-    "Productivity & Learning": {
+    "📈 Productivity & Learning": {
         "Productivity Prompt Planner": {
             "goal": "Generate a set of focused prompts to help me plan and prioritize my day effectively.",
             "tone": "Motivational",
@@ -101,7 +87,7 @@ templates_by_category = {
             "audience": "Personal growth and productivity focused users"
         }
     },
-    "Creative & Fun": {
+    "🎉 Creative & Fun": {
         "Vibecode Brainstorm Buddy": {
             "goal": "Come up with fresh, creative app or automation ideas that I could build with my current skills.",
             "tone": "Creative",
@@ -159,13 +145,7 @@ templates_by_category = {
     }
 }
 
-category_emojis = {
-    "Real Estate": "🏢",
-    "Productivity & Learning": "📈",
-    "Creative & Fun": "🎉"
-}
-
-# --- Flatten templates ---
+# --- Flatten and tag templates ---
 templates = {}
 template_categories = {}
 for category, entries in templates_by_category.items():
@@ -175,51 +155,93 @@ for category, entries in templates_by_category.items():
 
 # --- Hero Banner ---
 st.markdown("""
-    <div style="background: linear-gradient(135deg, #6e8efb, #a777e3); padding: 2rem 1rem; border-radius: 1.5rem; text-align: center; color: white; margin-bottom: 2rem;">
+    <div style="
+        background: linear-gradient(135deg, #6e8efb, #a777e3);
+        padding: 2rem 1rem;
+        border-radius: 1.5rem;
+        text-align: center;
+        color: white;
+        margin-bottom: 2rem;">
         <h1 style="font-size: 2.5rem;">💡 Prompt Synthesizer</h1>
         <p style="font-size: 1.1rem;">Turn your rough idea into a polished AI prompt</p>
     </div>
 """, unsafe_allow_html=True)
 
-# --- Sidebar ---
+# --- Sidebar UI ---
 with st.sidebar:
-    lottie_json = load_lottiefile("idea.json")
+    lottie_json = load_lottiefile("idea.json")  # 👈 Local Lottie file
     st_lottie(lottie_json, width=200, height=200, key="idea")
+
     st.markdown("<h2>💡 Prompt Toolkit</h2>", unsafe_allow_html=True)
     st.markdown(f"📌 <i>Tip of the Day:</i> <small>{random_tip}</small>", unsafe_allow_html=True)
     st.markdown("---")
     if st.button("🎲 Surprise Me!"):
         st.session_state.selected_template = random.choice(list(templates.keys()))
 
+# --- Template Category Buttons ---
 st.sidebar.markdown("<h3>📁 Templates</h3>", unsafe_allow_html=True)
 for category, entries in templates_by_category.items():
-    emoji = category_emojis.get(category, "")
-    st.sidebar.markdown(f"<h5>{emoji} {category}</h5>", unsafe_allow_html=True)
+    st.sidebar.markdown(f"<h5>{category}</h5>", unsafe_allow_html=True)
     for name in entries:
         if st.sidebar.button(name):
             st.session_state.selected_template = name
 
-# --- Prompt Input Form ---
+# --- Load selected template ---
 selected_template = st.session_state.get("selected_template", "")
 template_data = templates.get(selected_template, {})
+
+# --- Prefill Logic ---
 prefill = template_data if template_data else {}
 
+# --- Prompt Input Form ---
 with st.form("prompt_form"):
     st.markdown("### ✍️ Your Prompt Details")
+
     goal = st.text_area("💡 What do you want the AI to do?", value=prefill.get("goal", ""))
+
     col1, col2 = st.columns(2)
     with col1:
         tone = st.selectbox("🎭 Tone or vibe", valid_tones, index=valid_tones.index(prefill.get("tone", "Clear and helpful")))
     with col2:
         output_type = st.selectbox("🧾 Output format", ["Text", "Conversation", "Image Prompt", "Markdown", "Bullet List", "JSON"],
                                    index=["Text", "Conversation", "Image Prompt", "Markdown", "Bullet List", "JSON"].index(prefill.get("output_type", "Text")))
+
     audience = st.text_input("👥 Who's it for? (Optional)", value=prefill.get("audience", ""))
     save_txt = st.checkbox("💾 Save this to a .txt file?")
+        depth = st.slider("🧬 Prompt Inception Depth", 1, 5, 1, help="How many layers deep should we go?")
+    god_mode = st.checkbox("🛐 Enable Prompt God Mode (advanced recursion)")
     submitted = st.form_submit_button("✨ Generate Prompt")
 
-# --- Prompt Generation ---
+# --- Prompt Engine ---
 if submitted:
     with st.spinner("🪄 Synthesizing your prompt..."):
+        
+        # 🧠 Inception Mode Logic
+        if "prompt" in goal.lower() and goal.lower().count("prompt") >= 3:
+            st.markdown("### 🌀 INCEPTION MODE ACTIVATED")
+            st.info(f"You selected {depth} layer(s) of recursion.")
+            if depth >= 4:
+                st.warning("⚠️ Caution: Depths beyond level 3 may destabilize your perception of reality.")
+            if god_mode:
+                st.balloons()
+                st.success("🛐 Prompt God Mode enabled — the AI transcends time and syntax.")
+                st.markdown("> 'What is a prompt, but a mirror to the mind that wields it?' — Prompt God")
+
+            prompt_template = f"""
+You are an AI designed to generate prompts that generate prompts.
+Recursion depth: {depth}
+God Mode: {"ON" if god_mode else "OFF"}
+
+Your task:
+- Create a prompt that instructs an AI how to help someone write better prompts.
+- The tone should be clear, structured, and meta-aware.
+- Include formatting guidance.
+- Include a bad vs good prompt example (optional).
+- End with a meta-tip for refining future prompts.
+
+Respond only with the generated prompt and a meta-tip.
+"""
+        else:
         prompt_template = f"""
 You are a professional AI prompt engineer. Your task is to turn a rough user idea into a clear, structured, and effective AI prompt.
 
@@ -242,11 +264,20 @@ Respond only with the generated prompt and tip.
         try:
             response = model.generate_content(prompt_template)
             result = response.text
-            escaped_result = html.escape(result)  # ✅ Prevent broken rendering
 
-            st.markdown("## 🌟 Your Generated Prompt")
+            st.markdown("## 🎯 Your Generated Prompt")
             st.markdown(f"""
-                <div style='background-color: #fdfdfd; border-left: 5px solid #a777e3; border-radius: 0.5rem; padding: 1rem; font-family: monospace; font-size: 0.9rem; line-height: 1.6; white-space: pre-wrap; box-shadow: 0 4px 12px rgba(0,0,0,0.05);'>{escaped_result}</div>
+                <div style='
+                    background-color: #fdfdfd;
+                    border-left: 5px solid #a777e3;
+                    border-radius: 0.5rem;
+                    padding: 1rem;
+                    font-family: monospace;
+                    font-size: 0.9rem;
+                    line-height: 1.6;
+                    white-space: pre-wrap;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+                '>{result}</div>
             """, unsafe_allow_html=True)
 
             st.download_button("📥 Download Prompt", result, file_name="prompt.txt", mime="text/plain")
@@ -266,19 +297,18 @@ Respond only with the generated prompt and tip.
                 "prompt": result
             }
 
-            if IS_DEV:
-                if os.path.exists(history_path):
-                    df = pd.read_csv(history_path)
-                    df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
-                else:
-                    df = pd.DataFrame([new_row])
-                df.to_csv(history_path, index=False)
+            if os.path.exists(history_path):
+                df = pd.read_csv(history_path)
+                df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
+            else:
+                df = pd.DataFrame([new_row])
+            df.to_csv(history_path, index=False)
 
         except Exception as e:
             st.error(f"⚠️ Something went wrong:\n\n{e}")
 
-# --- Dev-only Prompt History ---
-if IS_DEV and os.path.exists(history_path):
+# --- Prompt History Viewer ---
+if os.path.exists(history_path):
     st.markdown("## 🕰️ Prompt History")
     with st.expander("Click to view your saved prompts"):
         history_df = pd.read_csv(history_path)
@@ -287,7 +317,8 @@ if IS_DEV and os.path.exists(history_path):
             'white-space': 'pre-wrap'
         }), use_container_width=True)
 
-# --- Footer ---
+import random
+
 sign_offs = [
     "Built by Ryan Martin. If it breaks, it's your fault.",
     "Another lovingly overengineered tool by Ryan Martin.",
@@ -295,6 +326,7 @@ sign_offs = [
     "Ryan Martin made this. Don't encourage him."
 ]
 
+# Hide from print/download (using a CSS class)
 st.markdown("""
     <style>
     .footer-note { text-align: center; font-size: 0.9rem; color: gray; }
@@ -304,6 +336,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+# Collapsible footer with random message
 with st.expander("👋 About this app"):
     st.markdown(f"""
     <div class="footer-note">
