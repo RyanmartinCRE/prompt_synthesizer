@@ -1,4 +1,5 @@
 streamlit
 streamlit-lottie
-google-generativeai==0.8.4
+google-generativeai
+python-dotenv
 pandas
