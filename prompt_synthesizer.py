@@ -316,6 +316,8 @@ if os.path.exists(history_path):
             'text-align': 'left',
             'white-space': 'pre-wrap'
         }), use_container_width=True)
+else:
+    st.info("No prompt history found yet. Generate a prompt to get started.")
 
 import random
 
