@@ -208,7 +208,7 @@ with st.form("prompt_form"):
 
     audience = st.text_input("👥 Who's it for? (Optional)", value=prefill.get("audience", ""))
     save_txt = st.checkbox("💾 Save this to a .txt file?")
-        depth = st.slider("🧬 Prompt Inception Depth", 1, 5, 1, help="How many layers deep should we go?")
+    depth = st.slider("🧬 Prompt Inception Depth", 1, 5, 1, help="How many layers deep should we go?")
     god_mode = st.checkbox("🛐 Enable Prompt God Mode (advanced recursion)")
     submitted = st.form_submit_button("✨ Generate Prompt")
 
